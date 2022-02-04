@@ -1,0 +1,167 @@
+                                                                ### ADMINISTRATION MENU ###
+import sqlite3
+conn_str = sqlite3.connect("Library Management System Project.db")
+cursor_obj = conn_str.cursor()
+#1# Here we are creating a table named students
+
+create_command = "create table if not exists students(sid INTEGER PRIMARY KEY,sname VARCHAR(20),sbatch VARCHAR(20))"
+cursor_obj.execute(create_command)
+
+#2# Inserting values and commiting the values into student table
+
+insert_commit = "insert into students (sid,sname,sbatch) values (01,'SOUMYA','AERONAUTICAL')"
+cursor_obj.execute(insert_commit)
+insert_commit = "insert into students (sid,sname,sbatch) values (02,'NIHA','CSE')"
+cursor_obj.execute(insert_commit)
+insert_commit = "insert into students (sid,sname,sbatch) values (03,'CHARU','EEE')"
+cursor_obj.execute(insert_commit)
+insert_commit = "insert into students (sid,sname,sbatch) values (04,'DIVYA','CSE')"
+cursor_obj.execute(insert_commit)
+insert_commit = "insert into students (sid,sname,sbatch) values (05,'RAMA','AREONAUTICAL')"
+cursor_obj.execute(insert_commit)
+i=int(input("""enter 1 for display all student records"""))
+if i==1:
+    cursor_obj.execute("select * from students")
+    results = cursor_obj.fetchall()
+    print(results)
+
+#3# For displaying specific student record
+
+i=int(input("""enter 2 for display specific student record"""))
+if i==2:
+   j = input("enter id no of specific student record")
+   insert_commit = ("select * from students where sid=" + j)
+   cursor_obj.execute(insert_commit)
+   results = cursor_obj.fetchall()
+print(results)
+
+#4# Modifying student record
+
+i=int(input("""enter 3 for modifying student record"""))
+if i==3:
+    z=(input("enter the column name:"))
+    j=(input("enter the column name in students table where change need to be made:"))
+    k=(input("enter student id of that row:"))
+    insert_commit = ("update students set"+chr(34)+z+chr(34)+"="+chr(34)+j+chr(34)+"where sid="+k)
+    cursor_obj.execute(insert_commit)
+    cursor_obj.execute("select * from students")
+    results = cursor_obj.fetchall()
+    print(results)
+
+#5# Deletion code is done at last
+
+#6# Creating table named books
+
+cursor_obj.execute("PRAGMA foreign_keys = ON;")
+
+insert_commit1 = ("""create table if not exists books (bid INTEGER PRIMARY KEY,bname VARCHAR(20),author VARCHAR(20),sid INTEGER,
+                    CONSTRAINT fk_TBLC FOREIGN KEY (sid) REFERENCES Students (sid) ON DELETE CASCADE)""""")
+cursor_obj.execute(insert_commit1)
+
+#7# Inserting values and commiting the values into books table
+
+insert_commit1 = ("insert into books (bid,bname,author) values (101,'HARRY POTTER AND CHAMBER OF SECRETS','J.K.ROWLING')")
+cursor_obj.execute(insert_commit1)
+insert_commit1 = ("insert into books (bid,bname,author) values (102,'THE OCEAN AT THE END OF THE LANE','NEIL GAIMAN')")
+cursor_obj.execute(insert_commit1)
+insert_commit1 = ("insert into books (bid,bname,author) values (103,'LIFE IS WHAT YOU MAKE IT','PREETI SHENOY')")
+cursor_obj.execute(insert_commit1)
+insert_commit1 = ("insert into books (bid,bname,author) values (104,'YOU CAN DO IT','IVAN KING')")
+cursor_obj.execute(insert_commit1)
+insert_commit1 = ("insert into books (bid,bname,author) values (105,'HOW SUCCESSFUL PEOPLE THINK','JOHN C.MAXWELL')")
+cursor_obj.execute(insert_commit1)
+
+#8# Displaying all records of table books
+
+i=int(input("""enter 4 for display all books records"""))
+if i==4:
+    cursor_obj.execute("select * from books")
+    results = cursor_obj.fetchall()
+    print(results)
+
+#9# Display specific book record
+
+i=int(input("""enter 5 for displaying specific book record"""))
+if i==5:
+    j=(input("enter id of specific books: "))
+    insert_commit1 = ("select * from books where bid="+j)
+    cursor_obj.execute(insert_commit1)
+    results = cursor_obj.fetchall()
+    print(results)
+
+#10# Modifying book record
+
+i=int(input("enter 6 to modify book "))
+if i==6:
+    z = (input("enter the column name: "))
+    j = (input("enter the column name in books table where change need to be made: "))
+    k = (input("enter books id of that row: "))
+    insert_commit1= ("Update books set"+chr(34)+z+chr(34)+"="+chr(34)+j+chr(34)+"where bid="+k)
+    cursor_obj.execute(insert_commit1)
+    cursor_obj.execute("select * from books")
+    results = cursor_obj.fetchall()
+    print(results)
+
+#11# Deletion code is done at the end
+
+                                        ### Issue Book ###
+
+insert_commit2 = ("""create table if not exists library_info(
+sid INTEGER,
+bookid INTEGER,
+book_issue_date DATE,
+bname,book_return_date DATE,
+student_issue_date DATE,
+student_return_date DATE,
+CONSTRAINT fk_TBLC FOREIGN KEY (sid) REFERENCES Students (sid) ON DELETE CASCADE
+CONSTRAINT fk_TBLC FOREIGN KEY (bookid) REFERENCES books(bookid) ON DELETE CASCADE)""")
+cursor_obj.execute(insert_commit2)
+cursor_obj.execute("insert into library_info(sid,bookid,bname,book_issue_date,book_return_date)"
+                   "values (01,101,'HARRY POTTER AND CHAMBER OF SECRETS','01-01-2021','15-01-2021')")
+cursor_obj.execute(insert_commit2)
+cursor_obj.execute("insert into library_info(sid,bookid,bname,book_issue_date,book_return_date)"
+                   " values (02,102,'THE OCEAN AT THE END OF THE LANE','02-02-2021','20-02-2021')")
+cursor_obj.execute(insert_commit2)
+cursor_obj.execute("insert into library_info(sid,bookid,bname,book_issue_date,book_return_date) "
+                   "values (03,103,'LIFE IS WHAT YOU MAKE IT','03-03-2021','10-03-2021')")
+cursor_obj.execute(insert_commit2)
+cursor_obj.execute("insert into library_info(sid,bookid,bname,book_issue_date,book_return_date) "
+                   "values (04,104,'YOU CAN DO IT','04-04-2021','15-04-2021')")
+cursor_obj.execute(insert_commit2)
+cursor_obj.execute("insert into library_info(sid,bookid,bname,book_issue_date,book_return_date)"
+                   " values (05,105,'HOW SUCCESSFUL PEOPLE THINK','05-05-2021','20-05-2021')")
+cursor_obj.execute(insert_commit2)
+i=int(input("""enter 7 for display library_info"""))
+if i==7:
+    cursor_obj.execute("select * from library_info")
+    results = cursor_obj.fetchall()
+    print(results)
+
+#11# Delete code of book record is done after doing deletion of student record
+
+
+#5# Deletion of student record
+
+i=int(input("enter 8 for deletion of a student record"))
+if i==8:
+    j=(input("enter id from student table to delete a row:"))
+    insert_commit= ("delete from sid where sid="+j)
+    cursor_obj.execute(insert_commit)
+    select_student=("select * from students")
+    cursor_obj.execute(select_student)
+    results = cursor_obj.fetchall()
+    for result in results:
+      print(results)
+
+#11# Deletion of book record
+
+i=int(input("enter 9 for deletion of a book record"))
+if i==9:
+    j=(input("enter id from book table to delete a row:"))
+    insert_commit1 = ("delete from bid where bid="+j)
+    cursor_obj.execute(insert_commit1)
+    select_book=("select * from books")
+    cursor_obj.execute(select_book)
+    results = cursor_obj.fetchall()
+    for result in results:
+      print(results)
